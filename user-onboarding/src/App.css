@@ -1,0 +1,19 @@
+.App {
+  background-color: #282c34;
+  min-height: 100vh;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.Form form{
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 15px;
+}
+
+.Submit {
+  margin-top: 10%;
+}
