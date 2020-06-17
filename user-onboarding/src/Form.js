@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 import * as yup from "yup";
+import axios from "axios";
 
 function Form() {
   const formSchema = yup.object().shape({
     name: yup.string().required("Name is a required field"),
-    email: yup.string().email().required("Must have a valid email address"),
+    email: yup.string().email().required("Must include a valid email address"),
     password: yup.string().required("Password is a required field"),
     terms: yup.boolean().oneOf([true], "You must agree to terms of use")
   });
@@ -24,13 +25,22 @@ function Form() {
     terms: ""
   });
 
+  const [allMyData, setAllMyData] = useState({
+      createdAt: "",
+      email: "",
+      id: "",
+      name: "",
+      password: "",
+      terms: false
+  })
+
   const validate = (event) => {
     yup.reach(formSchema, event.target.name)
     .validate(event.target.value)
     .then( valid => {
       setErrors({
         ...errors,
-        [e.target.name]: ""
+        [event.target.name]: ""
       })
     })
     .catch( err => {
@@ -42,7 +52,18 @@ function Form() {
     })
   };
 
+  const formSubmit = (event) => {
+      event.preventDefault();
+      axios.post("https://reqres.in/api/users", formState)
+        .then( response => {
+            setAllMyData(response.data)
+            console.log(allMyData)
+        })
+        .catch(err => console.log(err))
+  };
+
   const inputChange = (event) => {
+    event.persist()
     validate(event);
     let value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
     setFormState({
@@ -50,11 +71,11 @@ function Form() {
       [event.target.name]: value
     });
   }
-  console.log(formState);
+
   return (
     <div className="Form">
-      <form>
-        <label htmlFor="name">Name:</label>
+      <form onSubmit={formSubmit}>
+        <label htmlFor="name">Name:
           <input 
             id="name"
             name="name"
@@ -63,7 +84,9 @@ function Form() {
             value={formState.name}
             onChange={inputChange}
           />
-        <label htmlFor="email">Email:</label>
+          {errors.name.length > 0 ? <p className="error">{errors.name}</p> : null}
+        </label>
+        <label htmlFor="email">Email:
           <input 
             id="email"
             name="email"
@@ -72,7 +95,9 @@ function Form() {
             value={formState.email}
             onChange={inputChange}
           />
-        <label htmlFor="password">Password:</label>
+          {errors.email.length > 0 ? <p className="error">{errors.email}</p> : null}
+        </label>
+        <label htmlFor="password">Password:
           <input 
             id="password"
             name="password"
@@ -81,7 +106,9 @@ function Form() {
             value={formState.password}
             onChange={inputChange}
           />
-        <label htmlFor="terms">Accept Terms Of Service:</label>
+          {errors.password.length > 0 ? <p className="error">{errors.password}</p> : null}
+        </label>
+        <label htmlFor="terms">Accept Terms Of Service:
           <input 
             id="terms"
             name="terms"
@@ -89,8 +116,14 @@ function Form() {
             checked={formState.terms}
             onChange={inputChange}
           />
+        </label>
         <button type="submit" className="Submit">Submit</button>
         </form>
+        <div>
+          <p>Name: {allMyData.name}</p>
+          <p>Email: {allMyData.email}</p>
+          <p>Pass: {allMyData.password}</p>
+        </div>
     </div>
   );
 }

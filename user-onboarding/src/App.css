@@ -17,3 +17,8 @@
 .Submit {
   margin-top: 10%;
 }
+
+.error {
+  color: red;
+  font-size: 1rem;
+}
