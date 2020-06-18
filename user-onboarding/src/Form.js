@@ -120,9 +120,9 @@ function Form() {
         <button type="submit" className="Submit">Submit</button>
         </form>
         <div>
-          <p>Name: {allMyData.name}</p>
-          <p>Email: {allMyData.email}</p>
-          <p>Pass: {allMyData.password}</p>
+          <p className="pInfo">Name: {allMyData.name}</p>
+          <p className="pInfo">Email: {allMyData.email}</p>
+          <p className="pInfo">Password: {allMyData.password}</p>
         </div>
     </div>
   );

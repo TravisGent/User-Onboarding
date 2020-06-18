@@ -22,3 +22,10 @@
   color: red;
   font-size: 1rem;
 }
+
+.pInfo {
+  color: black;
+  background-color: white;
+  width: 400px;
+  margin: 1% auto;
+}
